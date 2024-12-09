@@ -58,29 +58,35 @@ class _CategoriesScreenState extends State<CategoriesScreen>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: _animationController,
-        child: GridView(
-          padding: const EdgeInsets.all(24),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 3 / 2,
-            crossAxisSpacing: 20, // space between columns
-            mainAxisSpacing: 20, // space between rows
-          ),
-          children: [
-            for (final category in availableCategories)
-              CategoryGridItem(
-                onSelectCategory: () {
-                  _selectCategory(context, category);
-                },
-                category: category,
-              )
-          ],
+      animation: _animationController,
+      child: GridView(
+        padding: const EdgeInsets.all(24),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 3 / 2,
+          crossAxisSpacing: 20, // space between columns
+          mainAxisSpacing: 20, // space between rows
         ),
-        builder: (ctx, child) => Padding(
-              padding:
-                  EdgeInsets.only(top: 100 - _animationController.value * 100),
-              child: child,
-            ));
+        children: [
+          for (final category in availableCategories)
+            CategoryGridItem(
+              onSelectCategory: () {
+                _selectCategory(context, category);
+              },
+              category: category,
+            )
+        ],
+      ),
+      builder: (ctx, child) => SlideTransition(
+        position: Tween(
+          begin: const Offset(0, 0.3),
+          end: const Offset(0, 0),
+        ).animate(
+          CurvedAnimation(
+              parent: _animationController, curve: Curves.easeInOut),
+        ),
+        child: child,
+      ),
+    );
   }
 }
